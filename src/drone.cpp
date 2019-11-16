@@ -52,14 +52,19 @@ void Drone::connect(const char* ssid, const char* password) {
 }
 
 void Drone::update() {
-        this->sendCommand("command");
         if(emergency) {
                 Serial.println("emergency state!");
                 this->handleEmergency();
         } else {
                 if(this->connected()) {
                         //Behavior
-                        
+                        if(!flying) {
+                                this->sendCommand("command");
+                                this->sendCommand("takeoff");
+                        } else {
+                                this->sendCommand("up 2");
+                                this->sendCommand("down 2");
+                        }
                 } else {
                         //Reconnect
                         this->connect("TELLO-FE2EE8", "");
@@ -76,10 +81,8 @@ void Drone::handleEmergency() {
 }
 
 void Drone::buttonPressed() {
-        if (flying == true) {
-                emergency = !emergency;
-                handleEmergency();
-        }
+        emergency = !emergency;
+        handleEmergency();
         Serial.print("emergency: ");
         Serial.println(emergency);
 }
