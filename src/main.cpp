@@ -5,6 +5,7 @@
 #include <string.h>
 
 Drone drone;
+//Instantiate a destination controller with inputs: button and light sensor and output: green light bulb
 DestinationController destCtrl = DestinationController(
   drone,
   {{"BUTTON", 23}, {"LIGHT_SENSOR", 4}},
@@ -13,14 +14,12 @@ DestinationController destCtrl = DestinationController(
 
 void setup() {
   Serial.begin(9600); 
-  destCtrl.registerIO();
+  destCtrl.registerIO(); //Registering the different I/O's of the destination controller
   destCtrl.addButtonListener(&drone);
   drone.connect("TELLO-FE2EE8", "");
 }
 
 void loop() {
-  //Destination controller
   destCtrl.update();  
-  //Drone
   drone.update();
 }
