@@ -77,7 +77,6 @@
                 udp.beginPacket(udpAddress,udpPort);
                 udp.printf(message.c_str());
                 udp.endPacket();
-               
         }
 
         string WifiConnection::getResponse()

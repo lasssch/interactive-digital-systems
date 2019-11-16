@@ -25,7 +25,7 @@ void Drone::sendMessage(string message) {
 }
 
 void Drone::sendCommand(string command) {
-        if(emergency && (command == "land" || command == "stop")) {
+        if(emergency && command == "emergency") {
                 Serial.print("Executing *emergency* command: ");
                 Serial.println(command.c_str());
                 wifiConnection.sendCommand(command);   
@@ -62,8 +62,7 @@ void Drone::update() {
                                 this->sendCommand("command");
                                 this->sendCommand("takeoff");
                         } else {
-                                this->sendCommand("up 2");
-                                this->sendCommand("down 2");
+                                this->deliverPackage();
                         }
                 } else {
                         //Reconnect
@@ -87,6 +86,15 @@ void Drone::buttonPressed() {
         Serial.println(emergency);
 }
 
+void Drone::deliverPackage() {
+        this->sendCommand("mon");
+        this->sendCommand("go 0 0 50 20 m2");
+        this->sendCommand("land");
+        this->sendCommand("takeoff");
+        this->sendCommand("cw 180");
+        this->sendCommand("go 0 0 50 20 m1");
+        this->sendCommand("land");
+}
        
 
  
