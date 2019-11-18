@@ -41,6 +41,12 @@ void test_button_pressed(void) {
     TEST_ASSERT_EQUAL(drone.emergency, true);
 }
 
+void test_sending_command(void) {
+    con.connect("TELLO-FE2EE8", "");
+    con.sendCommand("command");
+    TEST_ASSERT_EQUAL(con.getResponse().c_str(), "ok");
+}
+
 void setup() {
     delay(2000);
 
@@ -52,6 +58,7 @@ void setup() {
     RUN_TEST(test_button_pressed);
     RUN_TEST(test_connection_before_connect_call);
     RUN_TEST(test_connection_after_connect_call);   
+    RUN_TEST(test_sending_command);
 
     UNITY_END(); 
     
