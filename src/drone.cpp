@@ -11,6 +11,7 @@ WifiConnection wifiConnection;
 bool emergency;
 bool flying;
 
+//Constructor
 Drone::Drone() {
         emergency = false;
         flying = false;
@@ -25,26 +26,26 @@ void Drone::sendMessage(string message) {
 }
 
 void Drone::sendCommand(string command) {
-        if(emergency && command == "emergency") {
+        //If we are in emergency mode, the drone can only receive the command 'stop' or 'land'
+        if(emergency && (command == "stop" || command == "land")) {
                 Serial.print("Executing *emergency* command: ");
                 Serial.println(command.c_str());
                 wifiConnection.sendCommand(command);   
                 Serial.println(wifiConnection.getResponse().c_str());
-                flying = false;
-                delay (3000);
         } else {
                 Serial.print("Executing command: ");
                 Serial.println(command.c_str());
                 wifiConnection.sendCommand(command);   
                 Serial.println(wifiConnection.getResponse().c_str());
-
-                if(command == "land" || command == "emergency") {
-                        flying = false;
-                } else if(command == "takeoff") {
-                        flying = true;
-                }
-                delay (3000);
         }
+
+        //Determining whether or not the drone is flying
+        if(command == "land" || command == "emergency") {
+                flying = false;
+        } else if(command == "takeoff") {
+                flying = true;
+        }
+        delay (3000);
 }
 
 void Drone::connect(const char* ssid, const char* password) {
@@ -53,11 +54,12 @@ void Drone::connect(const char* ssid, const char* password) {
 
 void Drone::update() {
         if(emergency) {
+                //Emergency
                 Serial.println("emergency state!");
                 this->handleEmergency();
         } else {
                 if(this->connected()) {
-                        //Behavior
+                        //Deliver package behavior
                         if(!flying) {
                                 this->sendCommand("command");
                                 this->sendCommand("takeoff");

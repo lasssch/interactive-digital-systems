@@ -4,8 +4,6 @@
 #include <string>
 
 Drone droneControlled;
-
-//Input ~ Output
 std::map<string, int> inputs;
 std::map<string, int> outputs;
 

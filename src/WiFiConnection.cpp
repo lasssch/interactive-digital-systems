@@ -32,8 +32,6 @@
                 
                 Serial.print("Connection to: ");
                 Serial.println(networkName);
-                
-                //WiFi.disconnect();
 
                 // set eventlistener for wifi                
                 WiFi.onEvent([this](WiFiEvent_t event, system_event_info_t info) {this->WiFiEvent(event, info); });
@@ -73,7 +71,6 @@
         {
                 string out = "Sending command '" + message + "'";
                 Serial.println(out.c_str());
-                //Send a packet
                 udp.beginPacket(udpAddress,udpPort);
                 udp.printf(message.c_str());
                 udp.endPacket();
